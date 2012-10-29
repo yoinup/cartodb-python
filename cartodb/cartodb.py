@@ -78,12 +78,16 @@ class CartoDBAPIKey(CartoDBBase):
         super(CartoDBAPIKey, self).__init__(
             cartodb_domain, host, protocol, *args, **kwargs)
         self.api_key = api_key
-        self.client = HTTPClient('.'.join([cartodb_domain, host]))
+        self.client = HTTPClient(
+            '.'.join([cartodb_domain, host]),
+            connection_timeout=10.0,
+            network_timeout=10.0,)
         if protocol != 'https':
             warnings.warn("you are using API key auth method with http")
 
     def req(self, url, http_method="GET", http_headers={}, body=''):
         if http_method == "POST":
+            body = body + '&api_key=%s' % self.api_key
             headers = {'Content-type': 'application/x-www-form-urlencoded'}
             headers.update(http_headers)
             resp = self.client.post(
