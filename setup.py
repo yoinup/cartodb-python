@@ -3,7 +3,7 @@
 from setuptools import setup
 import sys
 
-REQUIRES = ['oauth2', 'gevent>=0.13.8']
+REQUIRES = ['oauth2', 'gevent']
 if sys.version_info < (2 , 6):
     REQUIRES.append('simplejson')
 
