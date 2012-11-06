@@ -81,7 +81,8 @@ class CartoDBAPIKey(CartoDBBase):
         self.client = HTTPClient(
             '.'.join([cartodb_domain, host]),
             connection_timeout=10.0,
-            network_timeout=10.0,)
+            network_timeout=10.0,
+            ssl=protocol == 'https')
         if protocol != 'https':
             warnings.warn("you are using API key auth method with http")
 
