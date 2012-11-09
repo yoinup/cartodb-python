@@ -7,7 +7,7 @@ import warnings
 from urllib import quote_plus
 
 try:
-    import json
+    import ujson as json
 except ImportError:
     import simplejson as json
 
