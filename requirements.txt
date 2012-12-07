@@ -1,3 +1,2 @@
 geventhttpclient
-oauth2
-simplejson
+ujson

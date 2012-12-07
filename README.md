@@ -22,10 +22,10 @@ Note that cartodb-python depends on the ouath2 module
 pip install oauth2
 ```
 
-and if you're running python < 2.6 you need to install simplejson
+This fork uses UltraJSON
 
 ```bash
-pip install simplejson
+pip install ujson
 ```
 
 
@@ -67,7 +67,7 @@ except CartoDBException as e:
     print ("some error ocurred", e)
 ```
 
-# Note for people using version 0.4 
+# Note for people using version 0.4
 
 With the new API key auth now you have two options to authenticate so the class CartoDB has been replaced with CartoDBOAuth and CartoDBAPIKey.
 
