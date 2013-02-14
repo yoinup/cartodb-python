@@ -15,13 +15,12 @@ except ImportError:
 RESOURCE_URL = '%(protocol)s://%(user)s.%(domain)s/api/%(api_version)s/sql/'
 
 
-class CartoDBException(Exception):
-    pass
-
-
 class CartoDBBase(object):
     """ basic client to access cartodb api """
     MAX_GET_QUERY_LEN = 2048
+
+    class CartoDBException(Exception):
+        pass
 
     def __init__(
             self, cartodb_domain, host='cartodb.com',
@@ -57,9 +56,9 @@ class CartoDBBase(object):
                 return json.loads(content)
             return content
         elif resp.status_code == 400:
-            raise CartoDBException(json.loads(content)['error'])
+            raise self.CartoDBException(json.loads(content)['error'])
         elif resp.status_code == 500:
-            raise CartoDBException('internal server error')
+            raise self.CartoDBException('internal server error')
         return None
 
 
@@ -74,15 +73,16 @@ class CartoDBAPIKey(CartoDBBase):
 
     def __init__(
             self, api_key, cartodb_domain, host='cartodb.com',
-            protocol='https', proxy_info=None, *args, **kwargs):
-        super(CartoDBAPIKey, self).__init__(
-            cartodb_domain, host, protocol, *args, **kwargs)
+            protocol='https', api_version='v2', proxy_info=None, *args, **kwargs):
+        CartoDBBase.__init__(self, cartodb_domain,
+            host, protocol, api_version)
         self.api_key = api_key
         self.client = HTTPClient(
             '.'.join([cartodb_domain, host]),
             connection_timeout=10.0,
             network_timeout=10.0,
-            ssl=protocol == 'https')
+            ssl=protocol == 'https',
+            **kwargs)
         if protocol != 'https':
             warnings.warn("you are using API key auth method with http")
 
