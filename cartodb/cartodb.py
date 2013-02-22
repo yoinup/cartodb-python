@@ -4,7 +4,7 @@ from geventhttpclient import HTTPClient
 from geventhttpclient.url import URL
 
 import warnings
-from urllib import quote_plus
+from urllib import urlencode
 
 try:
     import ujson as json
@@ -12,7 +12,7 @@ except ImportError:
     import simplejson as json
 
 
-RESOURCE_URL = '%(protocol)s://%(user)s.%(domain)s/api/%(api_version)s/sql/'
+RESOURCE_URL = '/api/%(api_version)s/sql/'
 
 
 class CartoDBBase(object):
@@ -26,12 +26,9 @@ class CartoDBBase(object):
             self, cartodb_domain, host='cartodb.com',
             protocol='https', api_version='v2'):
         self.resource_url = RESOURCE_URL % {
-            'user': cartodb_domain,
-            'domain': host,
-            'protocol': protocol,
             'api_version': api_version}
 
-    def req(self, url, http_method="GET", http_headers=None, body=''):
+    def req(self, url, http_method="GET", http_headers=None, body=None):
         """
         this method should implement
         how to send a request to server using propper auth
@@ -49,7 +46,8 @@ class CartoDBBase(object):
             url['q'] = sql
             resp = self.req(url)
         else:
-            resp = self.req(url, 'POST', body="q=%s" % quote_plus(sql))
+            body = {'q': sql}
+            resp = self.req(url, 'POST', body=body)
         content = resp.read()
         if resp.status_code == 200:
             if parse_json:
@@ -86,13 +84,14 @@ class CartoDBAPIKey(CartoDBBase):
         if protocol != 'https':
             warnings.warn("you are using API key auth method with http")
 
-    def req(self, url, http_method="GET", http_headers={}, body=''):
-        if http_method == "POST":
-            body = body + '&api_key=%s' % self.api_key
+    def req(self, url, http_method="GET", http_headers={}, body=None):
+        if http_method.upper() == "POST":
+            body = body or {}
+            body.setdefault('api_key', self.api_key)
             headers = {'Content-type': 'application/x-www-form-urlencoded'}
             headers.update(http_headers)
             resp = self.client.post(
-                url.request_uri, body=body, headers=headers)
+                url.request_uri, body=urlencode(body), headers=headers)
         else:
             url['api_key'] = self.api_key
             resp = self.client.get(url.request_uri, headers=http_headers)
