@@ -4,7 +4,12 @@ from geventhttpclient import HTTPClient
 from geventhttpclient.url import URL
 
 import warnings
-from urllib import urlencode
+
+
+try:
+    from urllib.parse import urlencode
+except ImportError:
+    from urllib import urlencode
 
 try:
     import ujson as json

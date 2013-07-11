@@ -1,7 +1,7 @@
 # coding=utf-8
 
 import unittest
-from cartodb import CartoDBAPIKey, CartoDBException
+from cartodb import CartoDBAPIKey
 
 from secret import *
 
@@ -39,10 +39,12 @@ class CartoDBClientTest(object):
 #     def setUp(self):
 #         self.client = CartoDB(CONSUMER_KEY, CONSUMER_SECRET, user, password, user)
 
+
 class CartoDBClientTestApiKey(CartoDBClientTest, unittest.TestCase):
 
     def setUp(self):
         self.client = CartoDBAPIKey(API_KEY, user)
+
 
 class CartoDBClientTestApiKeyV2(CartoDBClientTest, unittest.TestCase):
 
@@ -52,4 +54,3 @@ class CartoDBClientTestApiKeyV2(CartoDBClientTest, unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
