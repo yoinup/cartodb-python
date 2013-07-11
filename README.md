@@ -1,5 +1,7 @@
 # What is cartodb-python? #
 
+(this fork don't support OAUTH yet, and uses gevent with geventhttpclient)
+
 The cartodb-python project is a Python client for the [CartoDB SQL API](http://developers.cartodb.com/api/sql.html) that supports [authentication using OAuth](http://developers.cartodb.com/api/authentication.html).
 
 # Installation #
