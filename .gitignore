@@ -1,7 +1,10 @@
-
+dist/
+build/
 *.swp
 *.pyc
 secret.py
 env
+*.egg
+*.egg-info
 
 

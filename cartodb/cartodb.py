@@ -76,9 +76,9 @@ class CartoDBAPIKey(CartoDBBase):
 
     def __init__(
             self, api_key, cartodb_domain, host='cartodb.com',
-            protocol='https', api_version='v2', proxy_info=None, *args, **kwargs):
-        CartoDBBase.__init__(self, cartodb_domain,
-            host, protocol, api_version)
+            protocol='https', api_version='v2', proxy_info=None,
+            *args, **kwargs):
+        CartoDBBase.__init__(self, cartodb_domain, host, protocol, api_version)
         self.api_key = api_key
         self.client = HTTPClient(
             '.'.join([cartodb_domain, host]),
